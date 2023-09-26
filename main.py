@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, make_response
 import jwt
 from db.mongodb import Client
 from config.config import Configuration
-
+import random
 
 
 class FlaskAppWrapper:
@@ -53,9 +53,9 @@ class FlaskAppWrapper:
         token = form.get('token')
         encoded_jwt = jwt.decode(token, self.config.secret, algorithms=["HS256"])
 
-        return make_response(jsonify({"token": encoded_jwt}), 202)
+        return make_response(jsonify({"token": encoded_jwt, "random": random_string}), 202)
 
-
+random_string = random.randint(0,9999)
 flask_app = Flask(__name__)
 app = FlaskAppWrapper(flask_app)
 app.add_endpoint("/register", "register", app.register, methods=['POST'])
